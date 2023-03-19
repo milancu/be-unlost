@@ -1,4 +1,4 @@
-package com.unlost.beunlost
+package cz.milancu.app.beunlost
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class BeUnlostApplication
 
 fun main(args: Array<String>) {
-	runApplication<BeUnlostApplication>(*args)
+    runApplication<BeUnlostApplication>(*args)
 }
