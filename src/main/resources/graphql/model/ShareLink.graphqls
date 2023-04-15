@@ -1,0 +1,8 @@
+type ShareLink{
+    id:UUID!
+    link:String!
+    lifetime:DateTime!
+    documentId:UUID!
+    createBy:UUID!
+    createAt:DateTime
+}

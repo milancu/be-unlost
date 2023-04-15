@@ -1,0 +1,22 @@
+scalar UUID
+scalar DateTime
+
+type Query{
+    #USER
+    getCurrentUser:User!
+    getUser(id:UUID):User!
+
+    #DOCUMENT
+    getDocument(id:String):Document
+    getAllDocument:[Document]
+    getAllDocumentInFolder(folderId:UUID):[Document]
+
+    #FOLDER
+    getAllFolder:[Folder]
+    getAllSharedFolder:[Folder]
+    getAllOwnedFolder:[Folder]
+    getFolder(id:UUID):Folder
+
+    #SCHEMA
+    getSchema(id:UUID):CustomSchema
+}

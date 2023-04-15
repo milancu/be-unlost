@@ -1,0 +1,8 @@
+type User{
+    id: String!
+    firstname:String!,
+    lastname:String!,
+    email:String!,
+    deleted:Boolean!,
+    imageUrl:String!
+}

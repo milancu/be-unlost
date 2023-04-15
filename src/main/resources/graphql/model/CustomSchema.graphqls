@@ -1,0 +1,4 @@
+type CustomSchema{
+    id:UUID!
+    labels:[String]!
+}

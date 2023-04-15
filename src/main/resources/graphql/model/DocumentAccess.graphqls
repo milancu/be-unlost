@@ -1,0 +1,5 @@
+type DocumentAccess{
+    id:UUID!
+    documentId:UUID!
+    userId:UUID!
+}

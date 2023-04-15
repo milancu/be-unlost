@@ -1,0 +1,11 @@
+scalar Upload
+
+type Mutation {
+    createUser:Boolean
+
+    #FILE
+    uploadImage(files:[Upload], folderId:UUID):Boolean
+
+    #FOLDER
+    createFolder(name:String!, labels:[String]):Boolean
+}

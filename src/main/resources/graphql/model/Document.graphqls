@@ -1,0 +1,30 @@
+type Document{
+    id: UUID!
+    filename:String!,
+    storageFilename:String!,
+    createAt:DateTime!,
+    createByUser:UUID!,
+    customAnnotations:[Annotation]!,
+    annotatedData:String!,
+    allTextDescription:String!,
+    documentStatus:DocumentStatus!,
+    imgLink:String!,
+    lockByUser:UUID!,
+    deleted:Boolean!,
+    isLocked:Boolean!
+}
+
+type Annotation{
+    description:String!,
+    x: Int!
+    y: Int!
+    width: Int!
+    height: Int!
+}
+
+enum DocumentStatus{
+    UPLOADING,
+    EXTRACTING,
+    READY,
+    ERROR
+}

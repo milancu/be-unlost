@@ -1,0 +1,22 @@
+type Folder{
+    id:UUID!
+    name:String!
+    deleted:Boolean!
+    createBy:UUID!
+    createAt:DateTime!
+    documentIds:[UUID]
+    folderAccesses:[FolderAccess]
+    customSchemaId:UUID
+}
+
+type FolderAccess{
+    id:UUID!
+    folderId:UUID!
+    userId:UUID!
+    accessType:FolderAccessType
+}
+
+enum FolderAccessType{
+    OWNER
+    SHARED
+}
