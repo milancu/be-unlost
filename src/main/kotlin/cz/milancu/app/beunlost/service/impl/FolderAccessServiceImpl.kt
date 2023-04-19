@@ -31,7 +31,7 @@ class FolderAccessServiceImpl(
             accessType = if (checkIsCurrentUser(userId)) FolderAccessType.OWNER else FolderAccessType.SHARED
         )
         folderAccessRepository.save(folderAccess)
-        userService.addFolderAccess(folderAccess)
+        userService.addFolderAccess(folderAccess = folderAccess, userId = userId)
         log.info { "Created folder access. folderId: $folderId" }
         return folderAccess
     }
@@ -42,7 +42,7 @@ class FolderAccessServiceImpl(
 
     override fun removeAccess(folderId: UUID, userId: UUID): FolderAccess {
         val folderAccess = userAccessToFolder(folderId, userId)
-        userService.removeFolderAccess(folderAccess)
+        userService.removeFolderAccess(folderAccess = folderAccess, userId = userId)
         folderAccessRepository.delete(folderAccess)
         log.info { "Folder access deleted, folder: $folderId, user: $userId" }
         return folderAccess

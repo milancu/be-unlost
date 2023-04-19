@@ -43,29 +43,29 @@ class UserServiceImpl(
         return findByEmail(email);
     }
 
-    override fun addFolderAccess(folderAccess: FolderAccess) {
-        val user = getCurrentUser()
+    override fun addFolderAccess(userId: UUID, folderAccess: FolderAccess) {
+        val user = findById(userId)
         user.folderAccesses.add(folderAccess)
         log.info { "Assigned a folder access to a user: ${user.id}" }
         userRepository.save(user)
     }
 
-    override fun removeFolderAccess(folderAccess: FolderAccess) {
-        val user = getCurrentUser()
+    override fun removeFolderAccess(userId: UUID, folderAccess: FolderAccess) {
+        val user = findById(userId)
         user.folderAccesses.remove(folderAccess)
         log.info { "Removed a folder access to a user: ${user.id}" }
         userRepository.save(user)
     }
 
-    override fun addDocumentAccess(documentAccess: DocumentAccess) {
-        val user = getCurrentUser()
+    override fun addDocumentAccess(userId: UUID, documentAccess: DocumentAccess) {
+        val user = findById(userId)
         user.documentAccesses.add(documentAccess)
         log.info { "Assigned a document access to a user: ${user.id}" }
         userRepository.save(user)
     }
 
-    override fun removeDocumentAccess(documentAccess: DocumentAccess) {
-        val user = getCurrentUser()
+    override fun removeDocumentAccess(userId: UUID, documentAccess: DocumentAccess) {
+        val user = findById(userId)
         user.documentAccesses.remove(documentAccess)
         log.info { "Removed a document access to a user: ${user.id}" }
         userRepository.save(user)

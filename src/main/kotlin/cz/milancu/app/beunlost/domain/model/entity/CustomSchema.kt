@@ -8,5 +8,5 @@ import java.util.*
 class CustomSchema(
     @Id
     var id: UUID = UUID.randomUUID(),
-    var labels: List<String>
+    var labels: List<String>?
 )

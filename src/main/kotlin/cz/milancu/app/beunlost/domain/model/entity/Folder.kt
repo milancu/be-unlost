@@ -1,5 +1,6 @@
 package cz.milancu.app.beunlost.domain.model.entity
 
+import cz.milancu.app.beunlost.domain.model.enum.FolderAccessType
 import jakarta.persistence.*
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
@@ -17,6 +18,8 @@ class Folder(
     var createBy: UUID,
     var createAt: Instant = Instant.now(),
     var documentIds: MutableList<UUID> = ArrayList(),
+    @Enumerated(EnumType.STRING)
+    var folderType: FolderAccessType,
 
     @ManyToMany
     @JoinTable(

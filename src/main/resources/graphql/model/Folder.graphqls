@@ -3,9 +3,10 @@ type Folder{
     name:String!
     deleted:Boolean!
     createBy:UUID!
-    createAt:DateTime!
+    createAt:Instant!
     documentIds:[UUID]
     folderAccesses:[FolderAccess]
+    folderType:FolderAccessType,
     customSchemaId:UUID
 }
 

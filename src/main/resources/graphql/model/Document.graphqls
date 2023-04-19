@@ -2,16 +2,27 @@ type Document{
     id: UUID!
     filename:String!,
     storageFilename:String!,
-    createAt:DateTime!,
+    createAt:Instant!,
     createByUser:UUID!,
     customAnnotations:[Annotation]!,
-    annotatedData:String!,
+    annotatedData:[AttributeKeyValuePair]!,
     allTextDescription:String!,
     documentStatus:DocumentStatus!,
     imgLink:String!,
     lockByUser:UUID!,
     deleted:Boolean!,
-    isLocked:Boolean!
+    isLocked:Boolean!,
+    folderId:UUID
+}
+
+type AttributeKeyValuePair {
+    key: String
+    value: String
+}
+
+input AttributeKeyValuePairInput {
+    key: String
+    value: String
 }
 
 type Annotation{

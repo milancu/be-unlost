@@ -5,9 +5,12 @@ import cz.milancu.app.beunlost.domain.repository.SchemaRepository
 import cz.milancu.app.beunlost.service.DocumentService
 import cz.milancu.app.beunlost.service.FolderService
 import cz.milancu.app.beunlost.service.SchemaService
+import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import java.util.*
 import kotlin.NoSuchElementException
+
+private val log = KotlinLogging.logger {  }
 
 @Service
 class SchemaServiceImpl(
@@ -19,7 +22,7 @@ class SchemaServiceImpl(
         return schemaRepository.findById(id) ?: throw NoSuchElementException("Schema not found")
     }
 
-    override fun createSchema(labels: List<String>, folderId: UUID) {
+    override fun createSchema(labels: List<String>?, folderId: UUID) {
         val customSchema = CustomSchema(
             labels = labels
         )
@@ -34,6 +37,7 @@ class SchemaServiceImpl(
         val customSchema = findById(folder.customSchemaId!!)
         customSchema.labels = labels
         schemaRepository.save(customSchema)
+        log.info { "Updated schema for folder: $folderId" }
         //TODO change schema for each element
     }
 }

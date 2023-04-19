@@ -19,7 +19,23 @@ class DocumentQueryResolver(
         return documentService.getAllDocument();
     }
 
-    fun getAllDocumentInFolder(folderId: UUID):List<Document>{
+    fun getAllDocumentInFolder(folderId: UUID): List<Document> {
         return documentService.getAllDocumentInFolder(folderId)
+    }
+
+    fun getSumOfUploadingFile(): Int {
+        return documentService.getAllUploadingDocument()
+    }
+
+    fun getSumOfExtractingFile(): Int {
+        return documentService.getAllExtractingDocument()
+    }
+
+    fun getSumOfNewFile(): Int {
+        return documentService.getAllNewDocument()
+    }
+
+    fun searchFileByText(text: String): List<Document> {
+        return documentService.search(text)
     }
 }

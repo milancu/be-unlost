@@ -1,15 +1,22 @@
 package cz.milancu.app.beunlost.service.impl
 
-import cz.milancu.app.beunlost.domain.model.entity.CustomAnnotation
-import cz.milancu.app.beunlost.domain.model.entity.Document
-import cz.milancu.app.beunlost.domain.model.entity.DocumentAccess
+import cz.milancu.app.beunlost.domain.model.entity.*
 import cz.milancu.app.beunlost.domain.model.enum.DocumentStatus
 import cz.milancu.app.beunlost.domain.repository.DocumentRepository
 import cz.milancu.app.beunlost.service.*
 import mu.KotlinLogging
 import org.apache.catalina.core.ApplicationPart
+import org.springframework.data.elasticsearch.client.elc.QueryBuilders
+import org.springframework.data.elasticsearch.client.erhlc.NativeSearchQueryBuilder
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations
+import org.springframework.data.elasticsearch.core.SearchHit
+import org.springframework.data.elasticsearch.core.SearchHits
 import org.springframework.stereotype.Service
 import java.util.*
+import java.util.function.Function
+import java.util.stream.Collectors
+import kotlin.collections.ArrayList
+import kotlin.streams.toList
 
 
 private val log = KotlinLogging.logger { }
@@ -21,18 +28,19 @@ class DocumentServiceImpl(
     private val folderService: FolderService,
     private val userService: UserService,
     private val visionUtil: GCPVisionUtil,
-    private val bucketUtil: GCPBucketUtil
+    private val bucketUtil: GCPBucketUtil,
+    private val elasticsearchOperations: ElasticsearchOperations
 ) : DocumentService {
     override fun uploadDocument(file: ApplicationPart, folderId: UUID?) {
         val currentUser = userService.getCurrentUser()
         val document = Document(
             filename = file.submittedFileName,
             createByUser = currentUser.id,
-            documentStatus = DocumentStatus.UPLOADING
+            documentStatus = DocumentStatus.UPLOADING,
+            folderId = folderId
         )
         documentRepository.save(document)
         log.info { "Saved entity document to database with id:${document.id}, documentState: ${document.documentStatus}" }
-
         if (folderId != null) {
             folderService.addDocument(folderId, document)
             log.info { "Add document ${document.id} to folder with id:${folderId}" }
@@ -54,18 +62,28 @@ class DocumentServiceImpl(
     }
 
     override fun findDocumentById(id: UUID): Document {
-        return documentRepository.findById(id)
-            ?: throw NoSuchElementException("No document found with id: $id ")
+        return documentRepository.findById(id) ?: throw NoSuchElementException("No document found with id: $id ")
     }
 
     override fun getAllDocument(): List<Document> {
         val files = documentRepository.findAll().filter { d ->
             documentAccessService.userHasAccess(
-                documentId = d.id,
-                userId = userService.getCurrentUser().id
+                documentId = d.id, userId = userService.getCurrentUser().id
             )
         }.toList()
         return files
+    }
+
+    override fun getAllUploadingDocument(): Int {
+        return documentRepository.findDocumentsByDocumentStatus(DocumentStatus.UPLOADING).size
+    }
+
+    override fun getAllExtractingDocument(): Int {
+        return documentRepository.findDocumentsByDocumentStatus(DocumentStatus.EXTRACTING).size
+    }
+
+    override fun getAllNewDocument(): Int {
+        return documentRepository.findDocumentsByDocumentStatus(DocumentStatus.NEW).size
     }
 
     override fun deleteDocument(documentId: UUID) {
@@ -82,10 +100,13 @@ class DocumentServiceImpl(
         documentRepository.save(document)
     }
 
-    override fun updateAnnotation(documentId: UUID, annotations: List<CustomAnnotation>) {
+    override fun updateAnnotation(documentId: UUID, annotations: List<AttributeKeyValueModel>) {
         val document = documentRepository.findById(documentId)!!
         document.annotatedData = annotations
         log.info { "Updated document annotation data" }
+
+        (document.annotatedData.stream().forEach { println("${it.key}  ${it.value}") })
+
         documentRepository.save(document)
     }
 
@@ -112,8 +133,7 @@ class DocumentServiceImpl(
     }
 
     override fun removeDocumentAccess(documentId: UUID, userId: UUID) {
-        val documentAccess =
-            documentAccessService.removeAccess(documentId = documentId, userId = userId)
+        val documentAccess = documentAccessService.removeAccess(documentId = documentId, userId = userId)
         val document = findDocumentById(documentId)
         document.documentAccesses.remove(documentAccess)
         documentRepository.save(document)
@@ -122,5 +142,27 @@ class DocumentServiceImpl(
     override fun getAllDocumentInFolder(folderId: UUID): List<Document> {
         val folder = folderService.findById(folderId)
         return folder.documentIds.map { findDocumentById(it) }
+    }
+
+    override fun search(text: String): List<Document> {
+        val folderDocumentIds = userService.getCurrentUser().folderAccesses
+            .stream()
+            .flatMap { folderService.findById(it.folderId).documentIds.stream() }
+            .toList()
+
+        val userDocumentIds = userService.getCurrentUser().documentAccesses
+            .stream()
+            .map { it.documentId }
+            .toList()
+
+        val documents = folderDocumentIds + userDocumentIds
+
+
+        val result = documents.stream().map { findDocumentById(it) }.filter {
+            it.allTextDescription!!.uppercase().contains(text.uppercase())
+        }.toList()
+
+
+        return result
     }
 }

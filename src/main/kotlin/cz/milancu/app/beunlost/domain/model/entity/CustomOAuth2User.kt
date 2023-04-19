@@ -19,7 +19,7 @@ class CustomOAuth2User(
     }
 
     fun getFirstname(): String {
-        oAuth2User.attributes.forEach { (t, u )-> println("$t: $u")}
+//        oAuth2User.attributes.forEach { (t, u )-> println("$t: $u")}
         return oAuth2User.attributes.getValue("given_name").toString();
     }
 

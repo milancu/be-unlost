@@ -36,7 +36,7 @@ class FolderServiceImpl(
     override fun createFolder(name: String): Folder {
         val currentUser = userService.getCurrentUser()
         val folder = Folder(
-            name = name, createBy = currentUser.id
+            name = name, createBy = currentUser.id, folderType = FolderAccessType.OWNER
         )
         saveFolder(folder)
         addFolderAccess(folderId = folder.id, userId = currentUser.id)
@@ -62,6 +62,9 @@ class FolderServiceImpl(
         val folder = findById(folderId)
         val folderAccess = folderAccessService.createAccess(folderId = folderId, userId = userId)
         folder.folderAccesses.add(folderAccess)
+        if (userService.getCurrentUser().id != userId) {
+            folder.folderType = FolderAccessType.SHARED
+        }
         saveFolder(folder)
     }
 
@@ -92,9 +95,8 @@ class FolderServiceImpl(
     override fun getAllSharedFolder(): List<Folder> {
         val currentUser = userService.getCurrentUser()
         val folderAccess =
-            currentUser.folderAccesses.filter { folderAccess -> folderAccess.accessType == FolderAccessType.SHARED }
-                .map { x -> x.folderId }
-        return folderAccess.map { findById(it) }
+            currentUser.folderAccesses.map { x -> x.folderId }
+        return folderAccess.map { findById(it) }.filter { it.folderType == FolderAccessType.SHARED }
     }
 
     override fun getAllOwnFolder(): List<Folder> {
@@ -102,6 +104,10 @@ class FolderServiceImpl(
         val folderAccess =
             currentUser.folderAccesses.filter { folderAccess -> folderAccess.accessType == FolderAccessType.OWNER }
                 .map { x -> x.folderId }
-        return folderAccess.map { findById(it) }
+        return folderAccess.map { findById(it) }.filter { it.folderType == FolderAccessType.OWNER }
+    }
+
+    override fun searchFolderByName(name: String): List<Folder> {
+        return getAllFolder().filter { it.name.contains(name) || it.name == name }
     }
 }

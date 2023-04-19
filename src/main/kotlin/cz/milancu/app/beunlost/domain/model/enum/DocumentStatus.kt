@@ -4,5 +4,6 @@ enum class DocumentStatus {
     UPLOADING,
     EXTRACTING,
     READY,
-    ERROR
+    ERROR,
+    NEW
 }

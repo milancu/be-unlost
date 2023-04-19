@@ -1,6 +1,8 @@
 package cz.milancu.app.beunlost.domain.model.entity
 
 import jakarta.persistence.*
+import org.hibernate.annotations.Fetch
+import org.hibernate.annotations.FetchMode
 import org.hibernate.annotations.Where
 import java.util.*
 
@@ -22,6 +24,7 @@ class User(
         joinColumns = [JoinColumn(name = "USER_ID")],
         inverseJoinColumns = [JoinColumn(name = "ACCESS_ID")]
     )
+    @Fetch(FetchMode.JOIN)
     var documentAccesses: MutableList<DocumentAccess> = ArrayList(),
 
     @ManyToMany
@@ -30,5 +33,6 @@ class User(
         joinColumns = [JoinColumn(name = "USER_ID")],
         inverseJoinColumns = [JoinColumn(name = "ACCESS_ID")]
     )
+    @Fetch(FetchMode.JOIN)
     var folderAccesses: MutableList<FolderAccess> = ArrayList()
 )

@@ -9,7 +9,7 @@ import java.util.*
 interface FolderService {
     fun findById(id: UUID): Folder
     fun saveFolder(folder: Folder)
-    fun createFolder(name: String):Folder
+    fun createFolder(name: String): Folder
     fun deleteFolder(folderId: UUID)
     fun renameFolder(folderId: UUID, newName: String)
     fun addFolderAccess(folderId: UUID, userId: UUID)
@@ -19,4 +19,5 @@ interface FolderService {
     fun getAllFolder(): List<Folder>
     fun getAllSharedFolder(): List<Folder>
     fun getAllOwnFolder(): List<Folder>
+    fun searchFolderByName(name: String): List<Folder>
 }

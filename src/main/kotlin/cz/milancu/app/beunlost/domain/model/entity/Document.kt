@@ -33,24 +33,25 @@ class Document(
 
     @Field(type = FieldType.Nested)
     var customAnnotations: List<CustomAnnotation> = ArrayList(),
-
-    var annotatedData: List<CustomAnnotation> = ArrayList(),
+    @Field(type = FieldType.Nested)
+    var annotatedData: List<AttributeKeyValueModel> = ArrayList(),
 
     @Field(type = FieldType.Text)
     var allTextDescription: String? = null,
 
     @Field(type = FieldType.Text)
-    var documentStatus: DocumentStatus? = null,
+    var documentStatus: DocumentStatus? = DocumentStatus.NEW,
 
     @Field(type = FieldType.Text)
     var imgLink: String? = null,
-
 
     var lockByUser: UUID? = null,
 
     var deleted: Boolean? = false,
 
     var isLocked: Boolean? = false,
+
+    var folderId: UUID? = null,
 
     @ManyToMany
     @JoinTable(
@@ -60,3 +61,5 @@ class Document(
     )
     var documentAccesses: MutableList<DocumentAccess> = ArrayList()
 )
+
+

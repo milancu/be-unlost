@@ -11,9 +11,9 @@ interface UserService {
     fun findByEmail(email: String): User
     fun createUser(oauthUser: CustomOAuth2User);
     fun getCurrentUser(): User
-    fun addFolderAccess(folderAccess: FolderAccess)
-    fun removeFolderAccess(folderAccess: FolderAccess)
-    fun addDocumentAccess(documentAccess: DocumentAccess)
-    fun removeDocumentAccess(documentAccess: DocumentAccess)
+    fun addFolderAccess(userId: UUID, folderAccess: FolderAccess)
+    fun removeFolderAccess(userId: UUID, folderAccess: FolderAccess)
+    fun addDocumentAccess(userId: UUID, documentAccess: DocumentAccess)
+    fun removeDocumentAccess(userId: UUID, documentAccess: DocumentAccess)
 
 }

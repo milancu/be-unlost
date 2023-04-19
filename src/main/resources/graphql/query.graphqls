@@ -1,5 +1,5 @@
 scalar UUID
-scalar DateTime
+scalar Instant
 
 type Query{
     #USER
@@ -10,12 +10,18 @@ type Query{
     getDocument(id:String):Document
     getAllDocument:[Document]
     getAllDocumentInFolder(folderId:UUID):[Document]
+    getSumOfUploadingFile:Int
+    getSumOfExtractingFile:Int
+    getSumOfNewFile:Int
+    searchFileByText(text:String):[Document]
 
     #FOLDER
     getAllFolder:[Folder]
     getAllSharedFolder:[Folder]
     getAllOwnedFolder:[Folder]
     getFolder(id:UUID):Folder
+    getFolderSchema(id:UUID):CustomSchema
+    searchFolderByName(name:String):[Folder]
 
     #SCHEMA
     getSchema(id:UUID):CustomSchema

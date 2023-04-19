@@ -4,8 +4,13 @@ type Mutation {
     createUser:Boolean
 
     #FILE
-    uploadImage(files:[Upload], folderId:UUID):Boolean
+    uploadImage(files:[Upload], folderId:String):Boolean
+    updateAnnotation(annotations:[AttributeKeyValuePairInput]!, documentId:UUID):Boolean
 
     #FOLDER
-    createFolder(name:String!, labels:[String]):Boolean
+    createFolder(name:String!, labels:[String]):Folder
+    addUser(email:String!, folderId:UUID!):Folder
+
+    #SCHEMA
+    updateSchema(schema:[String], folderId:UUID):Folder
 }
