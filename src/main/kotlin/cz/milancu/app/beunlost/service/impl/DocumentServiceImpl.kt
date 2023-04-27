@@ -74,6 +74,12 @@ class DocumentServiceImpl(
         return files
     }
 
+    override fun getAllOtherDocument(): List<Document> {
+        val currentUser = userService.getCurrentUser()
+        val documentIds = currentUser.documentAccesses.stream().map { it.documentId }
+        return documentIds.map { findDocumentById(it) }.toList()
+    }
+
     override fun getAllUploadingDocument(): Int {
         return documentRepository.findDocumentsByDocumentStatus(DocumentStatus.UPLOADING).size
     }

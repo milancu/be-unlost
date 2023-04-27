@@ -10,6 +10,7 @@ interface DocumentService {
     fun findDocumentById(id: String): Document
     fun findDocumentById(id: UUID): Document
     fun getAllDocument(): List<Document>
+    fun getAllOtherDocument():List<Document>
     fun getAllUploadingDocument(): Int
     fun getAllExtractingDocument(): Int
     fun getAllNewDocument(): Int

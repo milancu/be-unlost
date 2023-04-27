@@ -5,6 +5,7 @@ import cz.milancu.app.beunlost.service.DocumentService
 import graphql.kickstart.tools.GraphQLQueryResolver
 import org.springframework.stereotype.Component
 import java.util.*
+import kotlin.streams.toList
 
 @Component
 class DocumentQueryResolver(
@@ -12,7 +13,7 @@ class DocumentQueryResolver(
 ) : GraphQLQueryResolver {
 
     fun getDocument(id: String): Document {
-        return documentService.findDocumentById(id)!!
+        return documentService.findDocumentById(id)
     }
 
     fun getAllDocument(): List<Document> {
@@ -37,5 +38,13 @@ class DocumentQueryResolver(
 
     fun searchFileByText(text: String): List<Document> {
         return documentService.search(text)
+    }
+
+    fun getDocuments(ids: List<String>): List<Document> {
+        return ids.stream().map { documentService.findDocumentById(UUID.fromString(it)) }.toList()
+    }
+
+    fun getAllOtherDocument(): List<Document> {
+        return documentService.getAllOtherDocument()
     }
 }
