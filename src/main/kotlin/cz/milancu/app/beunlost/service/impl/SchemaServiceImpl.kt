@@ -38,6 +38,5 @@ class SchemaServiceImpl(
         customSchema.labels = labels
         schemaRepository.save(customSchema)
         log.info { "Updated schema for folder: $folderId" }
-        //TODO change schema for each element
     }
 }

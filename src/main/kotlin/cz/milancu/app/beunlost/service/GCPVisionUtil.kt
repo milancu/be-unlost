@@ -64,8 +64,7 @@ class GCPVisionUtil(
                     document?.documentStatus = DocumentStatus.ERROR
                     documentRepository.save(document!!)
                     log.error { "Error: ${res.error.message}" }
-                    //TODO throw exception
-                    return
+                    throw IllegalStateException(res.error.message)
                 }
                 for (annotation in res.textAnnotationsList) {
                     entityAnnotation.add(annotation)
