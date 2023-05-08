@@ -33,4 +33,14 @@ class FolderMutationResolver(
         schemaService.updateSchema(schema, folderId)
         return folder
     }
+
+    fun removeFolderAccess(folderId: UUID, userId: UUID): Boolean {
+        folderService.removeFolderAccess(folderId, userId)
+        return true
+    }
+
+    fun deleteFolder(folderId: UUID): Boolean {
+        folderService.deleteFolder(folderId)
+        return true
+    }
 }

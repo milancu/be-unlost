@@ -15,11 +15,11 @@ interface DocumentService {
     fun getAllExtractingDocument(): Int
     fun getAllNewDocument(): Int
     fun deleteDocument(documentId: UUID)
-    fun renameDocument(documentId: UUID, newFilename: String)
+    fun renameDocument(documentId: UUID, newFilename: String):Document
     fun updateAnnotation(documentId: UUID, annotations: List<AttributeKeyValueModel>)
-    fun lockDocument(documentId: UUID)
-    fun unlockDocument(documentId: UUID)
-    fun addDocumentAccess(documentId: UUID, userId: UUID)
+    fun lockDocument(documentId: UUID):Document
+    fun unlockDocument(documentId: UUID):Document
+    fun addDocumentAccess(documentId: UUID, userId: UUID):Document
     fun removeDocumentAccess(documentId: UUID, userId: UUID)
     fun getAllDocumentInFolder(folderId: UUID): List<Document>
     fun search(text:String):List<Document>

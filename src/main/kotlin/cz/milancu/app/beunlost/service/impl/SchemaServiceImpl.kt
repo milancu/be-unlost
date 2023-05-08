@@ -22,7 +22,7 @@ class SchemaServiceImpl(
         return schemaRepository.findById(id) ?: throw NoSuchElementException("Schema not found")
     }
 
-    override fun createSchema(labels: List<String>?, folderId: UUID) {
+    override fun createSchema(labels: List<String>?, folderId: UUID): CustomSchema {
         val customSchema = CustomSchema(
             labels = labels
         )
@@ -30,13 +30,15 @@ class SchemaServiceImpl(
         val folder = folderService.findById(folderId)
         folder.customSchemaId = customSchema.id
         folderService.saveFolder(folder)
+        return customSchema
     }
 
-    override fun updateSchema(labels: List<String>, folderId: UUID) {
+    override fun updateSchema(labels: List<String>, folderId: UUID): CustomSchema {
         val folder = folderService.findById(folderId)
         val customSchema = findById(folder.customSchemaId!!)
         customSchema.labels = labels
         schemaRepository.save(customSchema)
         log.info { "Updated schema for folder: $folderId" }
+        return customSchema
     }
 }

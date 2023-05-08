@@ -6,11 +6,20 @@ type Mutation {
     #FILE
     uploadImage(files:[Upload], folderId:String):Boolean
     updateAnnotation(annotations:[AttributeKeyValuePairInput]!, documentId:UUID):Boolean
+    deleteDocument(documentId:UUID):Boolean
+    renameDocument(documentId:UUID, newFilename: String):Document
+    lockDocument(documentId:UUID):Document
+    unlockDocument(documentId:UUID):Document
+    addDocumentAccess(documentId:UUID, userId:UUID):Document
 
     #FOLDER
     createFolder(name:String!, labels:[String]):Folder
     addUser(email:String!, folderId:UUID!):Folder
+    removeFolderAccess(folderId:UUID, userId:UUID):Boolean
+    deleteFolder(folderId:UUID):Boolean
 
     #SCHEMA
     updateSchema(schema:[String], folderId:UUID):Folder
+
+    createShareLink(documentId:UUID):ShareLink
 }

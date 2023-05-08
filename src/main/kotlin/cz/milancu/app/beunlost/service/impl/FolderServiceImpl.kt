@@ -51,11 +51,12 @@ class FolderServiceImpl(
         log.info { "Deleted folder with id: ${folder.id}" }
     }
 
-    override fun renameFolder(folderId: UUID, newName: String) {
+    override fun renameFolder(folderId: UUID, newName: String): Folder {
         val folder = findById(folderId)
         folder.name = newName
         saveFolder(folder)
         log.info { "Renamed folder with id: ${folder.id}" }
+        return folder
     }
 
     override fun addFolderAccess(folderId: UUID, userId: UUID) {

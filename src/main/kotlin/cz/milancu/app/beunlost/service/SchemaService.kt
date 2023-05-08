@@ -5,7 +5,7 @@ import java.util.*
 import kotlin.collections.List
 
 interface SchemaService {
-    fun findById(id:UUID):CustomSchema
-    fun createSchema(labels: List<String>?, folderId:UUID)
-    fun updateSchema(labels: List<String>, folderId:UUID)
+    fun findById(id: UUID): CustomSchema
+    fun createSchema(labels: List<String>?, folderId: UUID): CustomSchema
+    fun updateSchema(labels: List<String>, folderId: UUID): CustomSchema
 }

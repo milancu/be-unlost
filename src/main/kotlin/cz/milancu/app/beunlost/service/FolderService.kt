@@ -11,7 +11,7 @@ interface FolderService {
     fun saveFolder(folder: Folder)
     fun createFolder(name: String): Folder
     fun deleteFolder(folderId: UUID)
-    fun renameFolder(folderId: UUID, newName: String)
+    fun renameFolder(folderId: UUID, newName: String): Folder
     fun addFolderAccess(folderId: UUID, userId: UUID)
     fun removeFolderAccess(folderId: UUID, userId: UUID)
     fun addDocument(folderId: UUID, document: Document)

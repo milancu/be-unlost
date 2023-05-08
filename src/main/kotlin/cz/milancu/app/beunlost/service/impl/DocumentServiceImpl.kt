@@ -99,11 +99,12 @@ class DocumentServiceImpl(
         documentRepository.save(document)
     }
 
-    override fun renameDocument(documentId: UUID, newFilename: String) {
+    override fun renameDocument(documentId: UUID, newFilename: String): Document {
         val document = documentRepository.findById(documentId)!!
         document.filename = newFilename
         log.info { "Renamed document filename, new filename: $newFilename" }
         documentRepository.save(document)
+        return document
     }
 
     override fun updateAnnotation(documentId: UUID, annotations: List<AttributeKeyValueModel>) {
@@ -116,26 +117,29 @@ class DocumentServiceImpl(
         documentRepository.save(document)
     }
 
-    override fun lockDocument(documentId: UUID) {
+    override fun lockDocument(documentId: UUID): Document {
         val document = documentRepository.findById(documentId)!!
         document.isLocked = true
         document.lockByUser = userService.getCurrentUser().id
         log.info { "Locked document with id: $documentId" }
         documentRepository.save(document)
+        return document
     }
 
-    override fun unlockDocument(documentId: UUID) {
+    override fun unlockDocument(documentId: UUID): Document {
         val document = documentRepository.findById(documentId)!!
         document.isLocked = false
         log.info { "Unlocked document with id: $documentId" }
         documentRepository.save(document)
+        return document
     }
 
-    override fun addDocumentAccess(documentId: UUID, userId: UUID) {
+    override fun addDocumentAccess(documentId: UUID, userId: UUID): Document {
         val document = findDocumentById(documentId)
         val documentAccess = documentAccessService.createAccess(documentId = documentId, userId = userId)
         document.documentAccesses.add(documentAccess)
         documentRepository.save(document)
+        return document
     }
 
     override fun removeDocumentAccess(documentId: UUID, userId: UUID) {
