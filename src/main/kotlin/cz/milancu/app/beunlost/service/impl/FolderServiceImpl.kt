@@ -47,6 +47,11 @@ class FolderServiceImpl(
     override fun deleteFolder(folderId: UUID) {
         val folder = findById(folderId)
         folder.deleted = true
+        val accesses = folder.folderAccesses
+//        folder.folderAccesses.clear()
+        println("accesses size: ${accesses.size}")
+        accesses.forEach { folderAccessService.deleteAccess(it) }
+        folder.folderAccesses.clear()
         saveFolder(folder)
         log.info { "Deleted folder with id: ${folder.id}" }
     }
@@ -96,14 +101,15 @@ class FolderServiceImpl(
     override fun getAllSharedFolder(): List<Folder> {
         val currentUser = userService.getCurrentUser()
         val folderAccess =
-            currentUser.folderAccesses.map { x -> x.folderId }
+            currentUser.folderAccesses.filter { !it.deleted }.map { x -> x.folderId }
         return folderAccess.map { findById(it) }.filter { it.folderType == FolderAccessType.SHARED }
     }
 
     override fun getAllOwnFolder(): List<Folder> {
         val currentUser = userService.getCurrentUser()
         val folderAccess =
-            currentUser.folderAccesses.filter { folderAccess -> folderAccess.accessType == FolderAccessType.OWNER }
+            currentUser.folderAccesses.filter { !it.deleted }
+                .filter { folderAccess -> folderAccess.accessType == FolderAccessType.OWNER }
                 .map { x -> x.folderId }
         return folderAccess.map { findById(it) }.filter { it.folderType == FolderAccessType.OWNER }
     }

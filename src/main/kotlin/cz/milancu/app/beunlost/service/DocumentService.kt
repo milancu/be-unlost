@@ -19,7 +19,7 @@ interface DocumentService {
     fun updateAnnotation(documentId: UUID, annotations: List<AttributeKeyValueModel>)
     fun lockDocument(documentId: UUID):Document
     fun unlockDocument(documentId: UUID):Document
-    fun addDocumentAccess(documentId: UUID, userId: UUID):Document
+    fun addDocumentAccess(documentId: UUID, email: String):Document
     fun removeDocumentAccess(documentId: UUID, userId: UUID)
     fun getAllDocumentInFolder(folderId: UUID): List<Document>
     fun search(text:String):List<Document>

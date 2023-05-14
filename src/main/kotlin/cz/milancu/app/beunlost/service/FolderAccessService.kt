@@ -9,4 +9,5 @@ interface FolderAccessService {
     fun removeAccess(folderId: UUID, userId: UUID): FolderAccess
     fun userAccessToFolder(folderId: UUID, userId: UUID): FolderAccess?
     fun userHasAccess(folderId: UUID, userId: UUID): Boolean
+    fun deleteAccess(folderAccess: FolderAccess)
 }

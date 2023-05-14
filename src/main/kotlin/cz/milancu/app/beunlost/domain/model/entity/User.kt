@@ -1,6 +1,7 @@
 package cz.milancu.app.beunlost.domain.model.entity
 
 import jakarta.persistence.*
+import org.hibernate.annotations.Cascade
 import org.hibernate.annotations.Fetch
 import org.hibernate.annotations.FetchMode
 import org.hibernate.annotations.Where

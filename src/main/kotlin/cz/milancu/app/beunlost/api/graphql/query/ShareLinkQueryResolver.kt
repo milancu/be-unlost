@@ -1,16 +1,16 @@
-package cz.milancu.app.beunlost.api.graphql.mutation
+package cz.milancu.app.beunlost.api.graphql.query
 
 import cz.milancu.app.beunlost.domain.model.entity.ShareLink
 import cz.milancu.app.beunlost.service.ShareLinkService
-import graphql.kickstart.tools.GraphQLMutationResolver
+import graphql.kickstart.tools.GraphQLQueryResolver
 import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
-class ShareLinkMutationResolver(
+class ShareLinkQueryResolver(
     private val shareLinkService: ShareLinkService
-) : GraphQLMutationResolver {
-    fun createShareLink(documentId: UUID): ShareLink {
+) : GraphQLQueryResolver {
+    fun getShareLink(documentId: UUID): ShareLink {
         return shareLinkService.createShareLink(documentId)
     }
 }

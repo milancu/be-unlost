@@ -21,7 +21,7 @@ class Folder(
     @Enumerated(EnumType.STRING)
     var folderType: FolderAccessType,
 
-    @ManyToMany
+    @ManyToMany()
     @JoinTable(
         name = "FOLDER_FOLDER_ACCESS",
         joinColumns = [JoinColumn(name = "FOLDER_ID")],

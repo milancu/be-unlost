@@ -8,8 +8,8 @@ type Document{
     annotatedData:[AttributeKeyValuePair]!,
     allTextDescription:String!,
     documentStatus:DocumentStatus!,
-    imgLink:String!,
-    lockByUser:UUID!,
+    imgLink:String,
+    lockByUser:UUID,
     deleted:Boolean!,
     isLocked:Boolean!,
     folderId:UUID

@@ -56,4 +56,11 @@ class FolderAccessServiceImpl(
     override fun userHasAccess(folderId: UUID, userId: UUID): Boolean {
         return folderAccessRepository.findFolderAccessByFolderIdAndUserId(folderId, userId) != null
     }
+
+    override fun deleteAccess(folderAccess: FolderAccess) {
+        userService.removeFolderAccess(userService.getCurrentUser().id, folderAccess)
+        folderAccess.deleted = true
+        folderAccessRepository.save(folderAccess)
+        log.info { "Deleted folder access" }
+    }
 }

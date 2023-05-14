@@ -27,4 +27,7 @@ type Query{
 
     #SCHEMA
     getSchema(id:UUID):CustomSchema
+
+    getShareLink(documentId:UUID):ShareLink
+
 }

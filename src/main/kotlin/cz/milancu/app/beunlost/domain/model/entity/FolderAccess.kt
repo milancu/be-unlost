@@ -16,5 +16,6 @@ class FolderAccess(
     var folderId: UUID,
     var userId: UUID,
     @Enumerated(EnumType.STRING)
-    var accessType: FolderAccessType
+    var accessType: FolderAccessType,
+    var deleted: Boolean = false
 )

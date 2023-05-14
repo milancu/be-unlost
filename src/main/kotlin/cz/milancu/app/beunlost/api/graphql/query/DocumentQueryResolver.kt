@@ -40,7 +40,12 @@ class DocumentQueryResolver(
         return documentService.search(text)
     }
 
-    fun getDocuments(ids: List<String>): List<Document> {
+    fun getDocuments(ids: List<String>?): List<Document> {
+//        if (ids == null) throw NoSuchElementException("")
+        ids?.forEach { println(it) }
+        if (ids == null) {
+            throw NoSuchElementException("ids was null")
+        }
         return ids.stream().map { documentService.findDocumentById(UUID.fromString(it)) }.toList()
     }
 

@@ -3,6 +3,7 @@ package cz.milancu.app.beunlost.service.impl
 import cz.milancu.app.beunlost.domain.model.entity.*
 import cz.milancu.app.beunlost.domain.model.enum.DocumentStatus
 import cz.milancu.app.beunlost.domain.repository.DocumentRepository
+import cz.milancu.app.beunlost.domain.repository.UserRepository
 import cz.milancu.app.beunlost.service.*
 import mu.KotlinLogging
 import org.apache.catalina.core.ApplicationPart
@@ -29,6 +30,7 @@ class DocumentServiceImpl(
     private val userService: UserService,
     private val visionUtil: GCPVisionUtil,
     private val bucketUtil: GCPBucketUtil,
+    private val userRepository: UserRepository,
     private val elasticsearchOperations: ElasticsearchOperations
 ) : DocumentService {
     override fun uploadDocument(file: ApplicationPart, folderId: UUID?) {
@@ -49,7 +51,7 @@ class DocumentServiceImpl(
         bucketUtil.uploadFileToBucketAndSave(file = file, documentId = document.id)
         visionUtil.extractTextAndSave(file = file, documentId = document.id)
 
-        addDocumentAccess(documentId = document.id, userId = currentUser.id)
+//        addDocumentAccess(documentId = document.id, email = currentUser.email)
     }
 
     override fun saveDocument(document: Document) {
@@ -134,11 +136,15 @@ class DocumentServiceImpl(
         return document
     }
 
-    override fun addDocumentAccess(documentId: UUID, userId: UUID): Document {
+    override fun addDocumentAccess(documentId: UUID, email: String): Document {
         val document = findDocumentById(documentId)
-        val documentAccess = documentAccessService.createAccess(documentId = documentId, userId = userId)
+        val user = userService.findByEmail(email)
+        val documentAccess = documentAccessService.createAccess(documentId = documentId, userId = user.id)
         document.documentAccesses.add(documentAccess)
         documentRepository.save(document)
+        user.documentAccesses.add(documentAccess)
+        userRepository.save(user)
+        log.info { "Add document access for user: ${user.id}, document: $documentId" }
         return document
     }
 
@@ -151,7 +157,7 @@ class DocumentServiceImpl(
 
     override fun getAllDocumentInFolder(folderId: UUID): List<Document> {
         val folder = folderService.findById(folderId)
-        return folder.documentIds.map { findDocumentById(it) }
+        return folder.documentIds.map { findDocumentById(it) }.filter { it.deleted == false }
     }
 
     override fun search(text: String): List<Document> {

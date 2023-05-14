@@ -44,8 +44,8 @@ class DocumentMutationResolver(
         return documentService.unlockDocument(documentId)
     }
 
-    fun addDocumentAccess(documentId: UUID, userId: UUID): Document {
-        return documentService.addDocumentAccess(documentId = documentId, userId = userId)
+    fun addDocumentAccess(documentId: UUID, email: String): Document {
+        return documentService.addDocumentAccess(documentId = documentId, email = email)
     }
 }
 

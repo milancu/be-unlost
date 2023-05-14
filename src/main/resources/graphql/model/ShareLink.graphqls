@@ -1,8 +1,8 @@
 type ShareLink{
     id:UUID!
     link:String!
-    lifetime:DateTime!
+    lifetime:Instant!
     documentId:UUID!
     createBy:UUID!
-    createAt:DateTime
+    createAt:Instant
 }
