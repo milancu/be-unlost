@@ -29,5 +29,4 @@ type Query{
     getSchema(id:UUID):CustomSchema
 
     getShareLink(documentId:UUID):ShareLink
-
 }

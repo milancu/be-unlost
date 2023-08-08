@@ -18,6 +18,12 @@ class OAuth2Controller(
     private val authorizedClientService: OAuth2AuthorizedClientService,
     private val userService: UserService
 ) {
+    /**
+     * Handles the Google callback after successful authentication.
+     *
+     * @param oauth2User The OAuth2 user object containing the user's information.
+     * @return The redirect URL to the client application with the access token appended as a query parameter.
+     */
     @GetMapping("/loginSuccess")
     fun handleGoogleCallback(@AuthenticationPrincipal oauth2User: OAuth2User?): String? {
         val authentication: OAuth2AuthenticationToken =

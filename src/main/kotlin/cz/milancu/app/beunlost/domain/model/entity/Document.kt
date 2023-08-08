@@ -61,5 +61,3 @@ class Document(
     )
     var documentAccesses: MutableList<DocumentAccess> = ArrayList()
 )
-
-

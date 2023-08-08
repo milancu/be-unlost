@@ -43,6 +43,12 @@ class UserServiceImpl(
         return findByEmail(email);
     }
 
+    /**
+     * Adds a folder access to a user.
+     *
+     * @param userId the UUID of the user
+     * @param folderAccess the folder access to be added
+     */
     override fun addFolderAccess(userId: UUID, folderAccess: FolderAccess) {
         val user = findById(userId)
         user.folderAccesses.add(folderAccess)
@@ -50,6 +56,12 @@ class UserServiceImpl(
         userRepository.save(user)
     }
 
+    /**
+     * Removes a folder access from a user's folder access list.
+     *
+     * @param userId The ID of the user.
+     * @param folderAccess The folder access to be removed.
+     */
     override fun removeFolderAccess(userId: UUID, folderAccess: FolderAccess) {
         val user = findById(userId)
         user.folderAccesses.remove(folderAccess)
@@ -57,6 +69,12 @@ class UserServiceImpl(
         userRepository.save(user)
     }
 
+    /**
+     * Adds document access to a user.
+     *
+     * @param userId the ID of the user
+     * @param documentAccess the document access to be added
+     */
     override fun addDocumentAccess(userId: UUID, documentAccess: DocumentAccess) {
         val user = findById(userId)
         user.documentAccesses.add(documentAccess)
@@ -64,6 +82,12 @@ class UserServiceImpl(
         userRepository.save(user)
     }
 
+    /**
+     * Removes a document access for a user.
+     *
+     * @param userId the ID of the user
+     * @param documentAccess the document access to be removed
+     */
     override fun removeDocumentAccess(userId: UUID, documentAccess: DocumentAccess) {
         val user = findById(userId)
         user.documentAccesses.remove(documentAccess)
@@ -71,6 +95,12 @@ class UserServiceImpl(
         userRepository.save(user)
     }
 
+    /**
+     * Checks if a user with the given email exists in the user repository.
+     *
+     * @param email The email of the user to check.
+     * @return true if a user with the given email exists, false otherwise.
+     */
     private fun userExits(email: String): Boolean {
         return userRepository.findByEmail(email) != null
     }

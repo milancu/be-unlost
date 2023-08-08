@@ -19,8 +19,19 @@ class GCPBucketUtil(
     private val documentRepository: DocumentRepository
 ) {
 
+    /**
+     * Represents a variable storage object that provides access to a storage service.
+     *
+     * @property storage The storage service instance.
+     */
     private val storage: Storage = StorageOptions.getDefaultInstance().service
 
+    /**
+     * Uploads a file to a bucket and saves the relevant information in the database.
+     *
+     * @param file The file to be uploaded.
+     * @param documentId The ID of the document associated with the file.
+     */
     fun uploadFileToBucketAndSave(file: ApplicationPart, documentId: UUID) {
         val filename = file.submittedFileName.plus(documentId)
         val blobId = BlobId.of(bucketName, filename)

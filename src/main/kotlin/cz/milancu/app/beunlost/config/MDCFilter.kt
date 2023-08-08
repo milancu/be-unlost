@@ -16,6 +16,14 @@ private const val TRACE_ID_HEADER = "trace-id"
 @Component
 class MDCFilter : OncePerRequestFilter() {
 
+    /**
+     * Performs filtering on the incoming request and sets a unique identifier in the response header.
+     * If the incoming request does not contain a trace ID header, a new unique identifier is generated and set in the request header.
+     *
+     * @param request the incoming HttpServletRequest
+     * @param response the HttpServletResponse
+     * @param filterChain the FilterChain
+     */
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,

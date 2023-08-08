@@ -64,6 +64,12 @@ class FolderServiceImpl(
         return folder
     }
 
+    /**
+     * Adds folder access for a user to a specific folder.
+     *
+     * @param folderId The ID of the folder.
+     * @param userId The ID of the user.
+     */
     override fun addFolderAccess(folderId: UUID, userId: UUID) {
         val folder = findById(folderId)
         val folderAccess = folderAccessService.createAccess(folderId = folderId, userId = userId)
@@ -74,6 +80,12 @@ class FolderServiceImpl(
         saveFolder(folder)
     }
 
+    /**
+     * Removes folder access for a specific user.
+     *
+     * @param folderId The ID of the folder to remove access from.
+     * @param userId The ID of the user to remove access for.
+     */
     override fun removeFolderAccess(folderId: UUID, userId: UUID) {
         val folder = findById(folderId)
         val folderAccess = folderAccessService.removeAccess(folderId = folderId, userId = userId)
@@ -81,23 +93,45 @@ class FolderServiceImpl(
         saveFolder(folder)
     }
 
+    /**
+     * Adds a document to the specified folder.
+     *
+     * @param folderId The ID of the folder.
+     * @param document The document to be added.
+     */
     override fun addDocument(folderId: UUID, document: Document) {
         val folder = findById(folderId)
         folder.documentIds.add(document.id)
         saveFolder(folder)
     }
 
+    /**
+     * Removes a document from the specified folder.
+     *
+     * @param folderId The ID of the folder from which the document should be removed.
+     * @param document The document to be removed.
+     */
     override fun removeDocument(folderId: UUID, document: Document) {
         val folder = findById(folderId)
         folder.documentIds.remove(document.id)
         saveFolder(folder)
     }
 
+    /**
+     * Retrieves all folders that the current user has access to.
+     *
+     * @return a list of folders that the current user has access to.
+     */
     override fun getAllFolder(): List<Folder> {
         val currentUser = userService.getCurrentUser()
         return folderRepository.findAll().filter { f -> folderAccessService.userHasAccess(f.id, currentUser.id) }
     }
 
+    /**
+     * Retrieves a list of all shared folders accessible to the current user.
+     *
+     * @return A list of [Folder] objects representing the shared folders.
+     */
     override fun getAllSharedFolder(): List<Folder> {
         val currentUser = userService.getCurrentUser()
         val folderAccess =
@@ -105,6 +139,11 @@ class FolderServiceImpl(
         return folderAccess.map { findById(it) }.filter { it.folderType == FolderAccessType.SHARED }
     }
 
+    /**
+     * Retrieves a list of all folders owned by the current user.
+     *
+     * @return A list of Folder objects representing the owned folders.
+     */
     override fun getAllOwnFolder(): List<Folder> {
         val currentUser = userService.getCurrentUser()
         val folderAccess =
@@ -114,6 +153,12 @@ class FolderServiceImpl(
         return folderAccess.map { findById(it) }.filter { it.folderType == FolderAccessType.OWNER }
     }
 
+    /**
+     * Searches for folders with the given name.
+     *
+     * @param name The name to search for.
+     * @return A list of folders matching the given name.
+     */
     override fun searchFolderByName(name: String): List<Folder> {
         return getAllFolder().filter { it.name.contains(name) || it.name == name }
     }

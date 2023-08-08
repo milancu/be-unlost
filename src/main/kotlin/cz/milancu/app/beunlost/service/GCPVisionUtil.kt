@@ -24,26 +24,34 @@ class GCPVisionUtil(
     private val documentRepository: DocumentRepository,
 ) {
 
+    /**
+     * Optimizes the given image file by resizing it to a predefined width and maintaining the aspect ratio.
+     * The image is resized to a width of 850 pixels, and the height is adjusted according to the aspect ratio.
+     *
+     * @param file The image file to optimize.
+     * @return A ByteString representation of the optimized image, or null if the optimization fails.
+     * @throws IOException If an I/O error occurs while reading or writing the image file.
+     */
     @Throws(IOException::class)
     fun optimizeImage(file: ApplicationPart): ByteString? {
-        val image = ImageIO.read(file.inputStream)
-        var outputStream = ByteArrayOutputStream()
-        ImageIO.write(image, "jpg", outputStream)
-        outputStream.close()
         val newWidth = 850
         val newHeight = (image.height.toDouble() * newWidth / image.width).roundToInt()
         val resizedImage = BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB)
+
         val g = resizedImage.createGraphics()
         g.drawImage(image, 0, 0, newWidth, newHeight, null)
         g.dispose()
-        outputStream = ByteArrayOutputStream()
-        ImageIO.write(resizedImage, "jpg", outputStream)
-        val imageBytes: ByteArray = outputStream.toByteArray()
-        outputStream.close()
 
-        return ByteString.copyFrom(imageBytes)
+        return resizedImage
     }
 
+    /**
+     * Asynchronously extracts text from an image file, optimizes the image, and saves the extracted text and annotations
+     * to a document identified by a document ID.
+     *
+     * @param file The image file to extract text from.
+     * @param documentId The ID of the document to save the extracted text and annotations to.
+     */
     @Async
     fun extractTextAndSave(file: ApplicationPart, documentId: UUID) {
         val imgBytes = optimizeImage(file)
@@ -79,6 +87,12 @@ class GCPVisionUtil(
         log.info { "Extracted text for document with id: ${document.id}, Document status: ${document.documentStatus}" }
     }
 
+    /**
+     * Maps a list of EntityAnnotation objects to a list of CustomAnnotation objects.
+     *
+     * @param entityAnnotation the list of EntityAnnotation objects to map
+     * @return the list of CustomAnnotation objects mapped from the input list of EntityAnnotation objects
+     */
     fun mapToCustomAnnotation(entityAnnotation: List<EntityAnnotation>): List<CustomAnnotation> {
         val customAnnotations: MutableList<CustomAnnotation> = ArrayList()
         for (annotation in entityAnnotation.subList(1, entityAnnotation.size)) {

@@ -13,6 +13,11 @@ private val logger = KotlinLogging.logger { }
 @Component
 class LoggingUtil {
 
+    /**
+     * Logs the incoming HTTP request.
+     *
+     * @param request the HttpServletRequest object representing the incoming request.
+     */
     fun logRequest(request: HttpServletRequest) {
         val parameters: Map<String, String> = getParameters(request)
         val headers = getHeaders(request)
@@ -27,11 +32,23 @@ class LoggingUtil {
         }
     }
 
+    /**
+     * Logs the response details.
+     *
+     * @param request The HTTP servlet request object.
+     * @param response The HTTP servlet response object.
+     */
     fun logResponse(request: HttpServletRequest, response: HttpServletResponse) {
         val headers = getHeaders(response)
         logger.info { "Log Response: Method: ${request.method} Response-Headers = $headers" }
     }
 
+    /**
+     * Retrieves the headers from the provided HttpServletResponse object.
+     *
+     * @param response the HttpServletResponse object from which to retrieve the headers
+     * @return a map containing the headers, where the key is the header name and the value is the header value
+     */
     private fun getHeaders(response: HttpServletResponse): Map<String, String> {
         val headers: MutableMap<String, String> = HashMap()
         val headerMap = response.headerNames
@@ -41,6 +58,12 @@ class LoggingUtil {
         return headers
     }
 
+    /**
+     * Retrieves the headers from the given HttpServletRequest.
+     *
+     * @param request The HttpServletRequest object from which to retrieve the headers.
+     * @return A map containing the headers, where the keys are the header names and the values are the header values.
+     */
     private fun getHeaders(request: HttpServletRequest): Map<String, String> {
         val headers: MutableMap<String, String> = HashMap()
         val headerMap = request.headerNames
@@ -50,6 +73,12 @@ class LoggingUtil {
         return headers
     }
 
+    /**
+     * Gets the parameters from the given HttpServletRequest.
+     *
+     * @param request the HttpServletRequest object from which the parameters should be retrieved
+     * @return a map containing the parameter names and values as key-value pairs
+     */
     private fun getParameters(request: HttpServletRequest): Map<String, String> {
         val parameters: MutableMap<String, String> = HashMap()
         val params = request.parameterNames
